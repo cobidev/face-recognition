@@ -35,28 +35,42 @@ class App extends Component {
     super();
     this.state = {
       input: "",
-      imageUrl: ""
+      imageUrl: "",
+      box: {}
     };
   }
 
-  onInputChange = event => {
+  calculateFaceDetection = (data) => {
+    const faceRegions = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById('inputImage');
+    const width = Number(image.width);
+    const height = Number(image.height);
+
+    return {
+      leftCol: faceRegions.left_col * width,
+      topRow: faceRegions.top_row * height,
+      rightCol: width - (faceRegions.right_col * width),
+      bottomRow: height - (faceRegions.bottom_row * height)
+    }
+  };
+
+  displayFaceBox = (box) => {
+    this.setState({ box: box });
+  }
+
+  onInputChange = (event) => {
     // set the input state from the input value in ImageLinkForm
     this.setState({ input: event.target.value });
   };
 
-  onButtonSubmit = event => {
+  onButtonSubmit = () => {
     // set image url from the input state
     this.setState({ imageUrl: this.state.input });
 
     // trigger the Clarifai API to detect face from the input (imageUrl) state an get the response
-    app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input).then(
-      function(response) {
-        console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
-      },
-      function(err) {
-        throw err;
-      }
-    );
+    app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+      .then(response => this.displayFaceBox(this.calculateFaceDetection(response)))
+      .catch(err => console.log(err));
   };
 
   // Render the App JSX
@@ -71,7 +85,7 @@ class App extends Component {
           onInputChange={this.onInputChange}
           onButtonSubmit={this.onButtonSubmit}
         />
-        <FaceRecognition imageUrl={this.state.imageUrl} />
+        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
       </div>
     );
   }
