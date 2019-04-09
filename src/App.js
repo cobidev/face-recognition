@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import Particles from "react-particles-js";
 import Navigation from "./components/Navigation/Navigation";
-import SignIn from "./components/SignIn/SignIn";
+import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import Logo from "./components/Logo/Logo";
 import Rank from "./components/Rank/Rank";
@@ -40,17 +40,41 @@ class App extends Component {
       input: "",
       imageUrl: "",
       box: {},
-      route: 'signin',
-      isSignedIn: false
+      route: 'login',
+      isLoggedIn: false,
+      user: {
+        _id: '',
+        name: '',
+        username: '',
+        entries: 0,
+        joined: ''
+      }
     };
+  }
+
+  loadUser = (userDB) => {
+    this.setState({ user: {
+      _id: userDB._id,
+      name: userDB.name,
+      username: userDB.username,
+      entries: userDB.entries,
+      createdAt: userDB.createdAt
+    }})
   }
 
   // METHOD: When the user change from routes, check if they are SignedIn or not. And Set the state of the current route
   onRouteChange = (route) => {
-    if (route === 'signin' || route === 'register') {
-      this.setState({ isSignedIn: false })
+    if (route === 'login' || route === 'register') {
+      this.setState({user: {
+        _id: '',
+        name: '',
+        username: '',
+        entries: 0,
+        joined: ''
+      }})
+      this.setState({ isLoggedIn: false })
     } else {
-      this.setState({ isSignedIn: true })
+      this.setState({ isLoggedIn: true })
     }
     this.setState({ route: route });
   }
@@ -96,16 +120,16 @@ class App extends Component {
     return (
       <div className="App">
         <Particles params={PARTICLE_OPTIONS} className="particles" />
-        <Navigation isSignedIn={this.state.isSignedIn} onRouteChange={this.onRouteChange}/>
+        <Navigation isLoggedIn={this.state.isLoggedIn} onRouteChange={this.onRouteChange}/>
         { /* If the route is Home, return the app components. Otherwise if return if they are in Signin or Register route*/
           this.state.route === 'home' ?
             <div>
               <Logo />
-              <Rank />
+              <Rank name={this.state.user.name} entries={this.state.user.entries} />
               <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
               <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
             </div>
-            : this.state.route === 'signin' ? <SignIn onRouteChange={this.onRouteChange} /> : <Register onRouteChange={this.onRouteChange} />
+            : this.state.route === 'login' ? <Login loadUser={this.loadUser} onRouteChange={this.onRouteChange} /> : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
         }
       </div>
     );
