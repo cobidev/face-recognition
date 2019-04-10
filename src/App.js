@@ -62,16 +62,21 @@ class App extends Component {
     }})
   }
 
+  resetUser = () => {
+    this.setState({ user: {
+      _id: '',
+      name: '',
+      username: '',
+      entries: 0,
+      createdAt: ''
+    }})
+  }
+
   // METHOD: When the user change from routes, check if they are SignedIn or not. And Set the state of the current route
   onRouteChange = (route) => {
     if (route === 'login' || route === 'register') {
-      this.setState({user: {
-        _id: '',
-        name: '',
-        username: '',
-        entries: 0,
-        joined: ''
-      }})
+      // reset the current User cuz is not logged in
+      this.resetUser();
       this.setState({ isLoggedIn: false })
     } else {
       this.setState({ isLoggedIn: true })
@@ -80,22 +85,42 @@ class App extends Component {
   }
 
   // METHOD: to get the url of the image when the user types in the input form
-  onInputChange = (event) => {
+  onImageLinkChange = (event) => {
     // set the input state from the input value in ImageLinkForm
     this.setState({ input: event.target.value });
   };
 
   // METHOD: when the user submit the face detect button
-  onButtonSubmit = () => {
+  onPictureSubmit = () => {
     // set image url from the input state
     this.setState({ imageUrl: this.state.input });
     // trigger the Clarifai API to detect face from the input (imageUrl) state an get the response (face regions)
     app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
       .then(response => {
-        // get the obtained measurements of the face (object) by calculating the response on the calculateFace function
-        const faceMeasurements = this.calculateFaceDetection(response);
-        // set the state {box} of the given faceMeasurements to implemente later on the HTML
-        this.setState({ box: faceMeasurements });
+        // Increase entries for the current user
+        if (response) {
+          fetch("http://localhost:3000/image", {
+            method: "put",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              _id: this.state.user._id,
+            })
+          })
+          .then(response => response.json())
+          .then(userDB => {
+            // update current user state ( only the entries propertie)
+            let user = {...this.state.jasper};
+            user.entries = userDB.entries;
+            this.setState({ user });
+
+            // get the obtained measurements of the face (object) by calculating the response on the calculateFace function
+            let faceMeasurements = this.calculateFaceDetection(response);
+            // set the state {box} of the given faceMeasurements to implemente later on the HTML
+            this.setState({ box: faceMeasurements });
+            // return the updated user
+            return this.loadUser(userDB);
+          })
+        }
       })
       .catch(err => console.log(err));
   };
@@ -120,13 +145,13 @@ class App extends Component {
     return (
       <div className="App">
         <Particles params={PARTICLE_OPTIONS} className="particles" />
-        <Navigation isLoggedIn={this.state.isLoggedIn} onRouteChange={this.onRouteChange}/>
+        <Navigation resetUser={this.resetUser} isLoggedIn={this.state.isLoggedIn} onRouteChange={this.onRouteChange}/>
         { /* If the route is Home, return the app components. Otherwise if return if they are in Signin or Register route*/
           this.state.route === 'home' ?
             <div>
               <Logo />
               <Rank name={this.state.user.name} entries={this.state.user.entries} />
-              <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
+              <ImageLinkForm onImageLinkChange={this.onImageLinkChange} onPictureSubmit={this.onPictureSubmit} />
               <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
             </div>
             : this.state.route === 'login' ? <Login loadUser={this.loadUser} onRouteChange={this.onRouteChange} /> : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />

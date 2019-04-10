@@ -33,7 +33,8 @@ class Login extends React.Component {
           return this.props.onRouteChange("home")
         }
         this.props.onRouteChange("login")
-      });
+      })
+      .catch(err => console.log(err.message));
   };
 
   render() {
