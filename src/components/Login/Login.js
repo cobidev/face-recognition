@@ -18,7 +18,7 @@ class Login extends React.Component {
   };
 
   onSubmitLogin = () => {
-    fetch("http://localhost:3000/login", {
+    fetch("https://dry-lowlands-90592.herokuapp.com/login", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
