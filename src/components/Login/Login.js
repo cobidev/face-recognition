@@ -30,10 +30,11 @@ class Login extends React.Component {
       .then(user => {
         if (user._id) {
           this.props.loadUser(user);
-          return this.props.onRouteChange("home")
+          return this.props.onRouteChange("home");
         }
-        this.props.onRouteChange("login")
-      }).catch(err => console.log(err));
+        this.props.onRouteChange("login");
+      })
+      .catch(err => console.log(err));
   };
 
   render() {
@@ -68,7 +69,7 @@ class Login extends React.Component {
                 />
               </div>
             </div>
-            <div className="">
+            <div>
               <input
                 onClick={this.onSubmitLogin}
                 className="b br2 ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
@@ -80,8 +81,7 @@ class Login extends React.Component {
               <p
                 onClick={() => this.props.onRouteChange("register")}
                 href="#0"
-                className="f6 pointer link dim black db"
-              >
+                className="f6 pointer link dim black db">
                 Register
               </p>
             </div>

@@ -1,4 +1,3 @@
-// Components
 import React, { Component } from "react";
 import Particles from "react-particles-js";
 import Navigation from "./components/Navigation/Navigation";
@@ -114,13 +113,16 @@ class App extends Component {
           this.setState({ box: faceMeasurements });
 
           // Increase entries for the current user
-          fetch("https://face-recognition-api-cobimr.herokuapp.com/image-entrie", {
-            method: "put",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              _id: this.state.user._id
-            })
-          })
+          fetch(
+            "https://face-recognition-api-cobimr.herokuapp.com/image-entrie",
+            {
+              method: "put",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                _id: this.state.user._id
+              })
+            }
+          )
             .then(response => response.json())
             .then(userDB => {
               // update current user state ( only the entries propertie)
@@ -157,19 +159,36 @@ class App extends Component {
     return (
       <div className="App">
         <Particles params={PARTICLE_OPTIONS} className="particles" />
-        <Navigation resetState={this.resetState} isLoggedIn={this.state.isLoggedIn} onRouteChange={this.onRouteChange} />
+        <Navigation
+          resetState={this.resetState}
+          isLoggedIn={this.state.isLoggedIn}
+          onRouteChange={this.onRouteChange}
+        />
         {/* If the route is Home, return the app components. Otherwise if return if they are in Signin or Register route*/
-        this.state.route === "home" ?
+        this.state.route === "home" ? (
           <div>
             <Logo />
-            <Rank name={this.state.user.name} entries={this.state.user.entries} />
-            <ImageLinkForm onImageLinkChange={this.onImageLinkChange} onPictureSubmit={this.onPictureSubmit} />
-            <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+            <Rank
+              name={this.state.user.name}
+              entries={this.state.user.entries}
+            />
+            <ImageLinkForm
+              onImageLinkChange={this.onImageLinkChange}
+              onPictureSubmit={this.onPictureSubmit}
+            />
+            <FaceRecognition
+              box={this.state.box}
+              imageUrl={this.state.imageUrl}
+            />
           </div>
-          : this.state.route === "login"
-            ? <Login loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
-            : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
-        }
+        ) : this.state.route === "login" ? (
+          <Login loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+        ) : (
+          <Register
+            loadUser={this.loadUser}
+            onRouteChange={this.onRouteChange}
+          />
+        )}
       </div>
     );
   }
