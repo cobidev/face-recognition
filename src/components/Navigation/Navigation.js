@@ -6,13 +6,13 @@ class Navigation extends React.Component {
     fetch("https://face-recognition-api-cobimr.herokuapp.com/logout", {
       method: 'post'
     })
-    .then(res => res.json())
-    .then(status => {
-      if (status === 'success') {
-        this.props.resetState();
-        return this.props.onRouteChange("login")
-      }
-    }).catch(err => console.log(err.message));
+      .then(res => res.json())
+      .then(status => {
+        if (status === 'success') {
+          this.props.resetState();
+          return this.props.onRouteChange("login")
+        }
+      }).catch(err => console.log(err.message));
   }
 
   render() {
@@ -31,8 +31,6 @@ class Navigation extends React.Component {
       );
     }
   }
-
-  
 };
 
 export default Navigation;

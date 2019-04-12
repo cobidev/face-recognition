@@ -114,16 +114,13 @@ class App extends Component {
           this.setState({ box: faceMeasurements });
 
           // Increase entries for the current user
-          fetch(
-            "https://face-recognition-api-cobimr.herokuapp.com/image-entrie",
-            {
-              method: "put",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                _id: this.state.user._id
-              })
-            }
-          )
+          fetch("https://face-recognition-api-cobimr.herokuapp.com/image-entrie", {
+            method: "put",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              _id: this.state.user._id
+            })
+          })
             .then(response => response.json())
             .then(userDB => {
               // update current user state ( only the entries propertie)
