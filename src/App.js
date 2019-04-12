@@ -19,10 +19,10 @@ const PARTICLE_OPTIONS = {
       value: 30,
       density: {
         enable: true,
-        value_area: 300
-      }
-    }
-  }
+        value_area: 300,
+      },
+    },
+  },
 };
 
 // App component
@@ -40,8 +40,8 @@ class App extends Component {
         name: '',
         username: '',
         entries: 0,
-        joined: ''
-      }
+        joined: '',
+      },
     };
   }
 
@@ -52,8 +52,8 @@ class App extends Component {
         name: userDB.name,
         username: userDB.username,
         entries: userDB.entries,
-        createdAt: userDB.createdAt
-      }
+        createdAt: userDB.createdAt,
+      },
     });
   };
 
@@ -69,8 +69,8 @@ class App extends Component {
         name: '',
         username: '',
         entries: 0,
-        joined: ''
-      }
+        joined: '',
+      },
     });
   };
 
@@ -101,8 +101,8 @@ class App extends Component {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        input: this.state.input
-      })
+        input: this.state.input,
+      }),
     })
       .then(response => response.json())
       .then(response => {
@@ -113,16 +113,13 @@ class App extends Component {
           this.setState({ box: faceMeasurements });
 
           // Increase entries for the current user
-          fetch(
-            'https://face-recognition-api-cobimr.herokuapp.com/image-entrie',
-            {
-              method: 'put',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                _id: this.state.user._id
-              })
-            }
-          )
+          fetch('https://face-recognition-api-cobimr.herokuapp.com/image-entrie', {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              _id: this.state.user._id,
+            }),
+          })
             .then(response => response.json())
             .then(userDB => {
               // update current user state ( only the entries propertie)
@@ -140,8 +137,7 @@ class App extends Component {
 
   // Function: that return an Object with the converted Face Measurements for the HTML/CSS use (in percentajes)
   calculateFaceDetection = data => {
-    const faceRegions =
-      data.outputs[0].data.regions[0].region_info.bounding_box;
+    const faceRegions = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('inputImage');
     const width = Number(image.width);
     const height = Number(image.height);
@@ -150,7 +146,7 @@ class App extends Component {
       leftCol: faceRegions.left_col * width,
       topRow: faceRegions.top_row * height,
       rightCol: width - faceRegions.right_col * width,
-      bottomRow: height - faceRegions.bottom_row * height
+      bottomRow: height - faceRegions.bottom_row * height,
     };
   };
 
@@ -168,26 +164,17 @@ class App extends Component {
         this.state.route === 'home' ? (
           <div>
             <Logo />
-            <Rank
-              name={this.state.user.name}
-              entries={this.state.user.entries}
-            />
+            <Rank name={this.state.user.name} entries={this.state.user.entries} />
             <ImageLinkForm
               onImageLinkChange={this.onImageLinkChange}
               onPictureSubmit={this.onPictureSubmit}
             />
-            <FaceRecognition
-              box={this.state.box}
-              imageUrl={this.state.imageUrl}
-            />
+            <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
           </div>
         ) : this.state.route === 'login' ? (
           <Login loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
         ) : (
-          <Register
-            loadUser={this.loadUser}
-            onRouteChange={this.onRouteChange}
-          />
+          <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
         )}
       </div>
     );

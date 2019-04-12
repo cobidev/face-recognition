@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      password: ""
+      username: '',
+      password: '',
     };
   }
 
@@ -18,21 +18,21 @@ class Login extends React.Component {
   };
 
   onSubmitLogin = () => {
-    fetch("https://face-recognition-api-cobimr.herokuapp.com/login", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
+    fetch('https://face-recognition-api-cobimr.herokuapp.com/login', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         username: this.state.username,
-        password: this.state.password
-      })
+        password: this.state.password,
+      }),
     })
       .then(res => res.json())
       .then(user => {
         if (user._id) {
           this.props.loadUser(user);
-          return this.props.onRouteChange("home");
+          return this.props.onRouteChange('home');
         }
-        this.props.onRouteChange("login");
+        this.props.onRouteChange('login');
       })
       .catch(err => console.log(err));
   };
@@ -79,9 +79,10 @@ class Login extends React.Component {
             </div>
             <div className="lh-copy mt3">
               <p
-                onClick={() => this.props.onRouteChange("register")}
+                onClick={() => this.props.onRouteChange('register')}
                 href="#0"
-                className="f6 pointer link dim black db">
+                className="f6 pointer link dim black db"
+              >
                 Register
               </p>
             </div>
