@@ -62,21 +62,28 @@ class App extends Component {
     }})
   }
 
-  resetUser = () => {
-    this.setState({ user: {
-      _id: '',
-      name: '',
-      username: '',
-      entries: 0,
-      createdAt: ''
-    }})
+  resetState = () => {
+    this.setState({
+      input: "",
+      imageUrl: "",
+      box: {},
+      route: 'login',
+      isLoggedIn: false,
+      user: {
+        _id: '',
+        name: '',
+        username: '',
+        entries: 0,
+        joined: ''
+      }
+    })
   }
 
   // METHOD: When the user change from routes, check if they are SignedIn or not. And Set the state of the current route
   onRouteChange = (route) => {
     if (route === 'login' || route === 'register') {
       // reset the current User cuz is not logged in
-      this.resetUser();
+      this.resetState();
       this.setState({ isLoggedIn: false })
     } else {
       this.setState({ isLoggedIn: true })
@@ -119,10 +126,9 @@ class App extends Component {
             this.setState({ box: faceMeasurements });
             // return the updated user
             return this.loadUser(userDB);
-          })
+          }).catch(err => console.log(err));
         }
-      })
-      .catch(err => console.log(err));
+      }).catch(err => console.log(err));
   };
 
   // Function: that return an Object with the converted Face Measurements for the HTML/CSS use (in percentajes)
@@ -145,7 +151,7 @@ class App extends Component {
     return (
       <div className="App">
         <Particles params={PARTICLE_OPTIONS} className="particles" />
-        <Navigation resetUser={this.resetUser} isLoggedIn={this.state.isLoggedIn} onRouteChange={this.onRouteChange}/>
+        <Navigation resetState={this.resetState} isLoggedIn={this.state.isLoggedIn} onRouteChange={this.onRouteChange}/>
         { /* If the route is Home, return the app components. Otherwise if return if they are in Signin or Register route*/
           this.state.route === 'home' ?
             <div>

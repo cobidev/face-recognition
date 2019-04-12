@@ -9,7 +9,7 @@ class Navigation extends React.Component {
       .then(res => res.json())
       .then(status => {
         if (status === 'success') {
-          this.props.resetUser();
+          this.props.resetState();
           return this.props.onRouteChange("login")
         }
       })
