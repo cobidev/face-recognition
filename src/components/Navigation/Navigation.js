@@ -6,14 +6,13 @@ class Navigation extends React.Component {
     fetch("https://dry-lowlands-90592.herokuapp.com/logout", {
       method: 'post'
     })
-      .then(res => res.json())
-      .then(status => {
-        if (status === 'success') {
-          this.props.resetState();
-          return this.props.onRouteChange("login")
-        }
-      })
-      .catch(err => console.log(err.message));
+    .then(res => res.json())
+    .then(status => {
+      if (status === 'success') {
+        this.props.resetState();
+        return this.props.onRouteChange("login")
+      }
+    }).catch(err => console.log(err.message));
   }
 
   render() {
