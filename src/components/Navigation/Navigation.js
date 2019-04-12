@@ -3,7 +3,7 @@ import React from "react";
 class Navigation extends React.Component {
 
   onLogoutSubmit = () => {
-    fetch("https://dry-lowlands-90592.herokuapp.com/logout", {
+    fetch("https://face-recognition-api-cobimr.herokuapp.com/logout", {
       method: 'post'
     })
     .then(res => res.json())
