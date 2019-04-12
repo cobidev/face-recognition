@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import Particles from "react-particles-js";
-import Navigation from "./components/Navigation/Navigation";
-import Login from "./components/Login/Login";
-import Register from "./components/Register/Register";
-import Logo from "./components/Logo/Logo";
-import Rank from "./components/Rank/Rank";
-import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
-import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
+import React, { Component } from 'react';
+import Particles from 'react-particles-js';
+import Navigation from './components/Navigation/Navigation';
+import Login from './components/Login/Login';
+import Register from './components/Register/Register';
+import Logo from './components/Logo/Logo';
+import Rank from './components/Rank/Rank';
+import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
+import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 
 // Styles
-import "tachyons";
-import "./App.css";
+import 'tachyons';
+import './App.css';
 
 // Particles config
 const PARTICLE_OPTIONS = {
@@ -30,17 +30,17 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      input: "",
-      imageUrl: "",
+      input: '',
+      imageUrl: '',
       box: {},
-      route: "login",
+      route: 'login',
       isLoggedIn: false,
       user: {
-        _id: "",
-        name: "",
-        username: "",
+        _id: '',
+        name: '',
+        username: '',
         entries: 0,
-        joined: ""
+        joined: ''
       }
     };
   }
@@ -59,24 +59,24 @@ class App extends Component {
 
   resetState = () => {
     this.setState({
-      input: "",
-      imageUrl: "",
+      input: '',
+      imageUrl: '',
       box: {},
-      route: "login",
+      route: 'login',
       isLoggedIn: false,
       user: {
-        _id: "",
-        name: "",
-        username: "",
+        _id: '',
+        name: '',
+        username: '',
         entries: 0,
-        joined: ""
+        joined: ''
       }
     });
   };
 
   // METHOD: When the user change from routes, check if they are SignedIn or not. And Set the state of the current route
   onRouteChange = route => {
-    if (route === "login" || route === "register") {
+    if (route === 'login' || route === 'register') {
       // reset the current User cuz is not logged in
       this.resetState();
       this.setState({ isLoggedIn: false });
@@ -97,9 +97,9 @@ class App extends Component {
     this.setState({ imageUrl: this.state.input });
 
     // Fecth API among Clarifai to detect face from the input (Image URL) an get the response (face regions)
-    fetch("https://face-recognition-api-cobimr.herokuapp.com/image-url", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
+    fetch('https://face-recognition-api-cobimr.herokuapp.com/image-url', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         input: this.state.input
       })
@@ -114,10 +114,10 @@ class App extends Component {
 
           // Increase entries for the current user
           fetch(
-            "https://face-recognition-api-cobimr.herokuapp.com/image-entrie",
+            'https://face-recognition-api-cobimr.herokuapp.com/image-entrie',
             {
-              method: "put",
-              headers: { "Content-Type": "application/json" },
+              method: 'put',
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 _id: this.state.user._id
               })
@@ -142,7 +142,7 @@ class App extends Component {
   calculateFaceDetection = data => {
     const faceRegions =
       data.outputs[0].data.regions[0].region_info.bounding_box;
-    const image = document.getElementById("inputImage");
+    const image = document.getElementById('inputImage');
     const width = Number(image.width);
     const height = Number(image.height);
 
@@ -165,7 +165,7 @@ class App extends Component {
           onRouteChange={this.onRouteChange}
         />
         {/* If the route is Home, return the app components. Otherwise if return if they are in Signin or Register route*/
-        this.state.route === "home" ? (
+        this.state.route === 'home' ? (
           <div>
             <Logo />
             <Rank
@@ -181,7 +181,7 @@ class App extends Component {
               imageUrl={this.state.imageUrl}
             />
           </div>
-        ) : this.state.route === "login" ? (
+        ) : this.state.route === 'login' ? (
           <Login loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
         ) : (
           <Register
