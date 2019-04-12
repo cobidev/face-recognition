@@ -98,7 +98,7 @@ class App extends Component {
     this.setState({ imageUrl: this.state.input });
 
     // Fecth API among Clarifai to detect face from the input (Image URL) an get the response (face regions)
-    fetch("https://dry-lowlands-90592.herokuapp.com/image-url", {
+    fetch("https://face-recognition-api-cobimr.herokuapp.com/image-url", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -114,7 +114,7 @@ class App extends Component {
           this.setState({ box: faceMeasurements });
 
           // Increase entries for the current user
-          fetch("https://dry-lowlands-90592.herokuapp.com/image-entrie", {
+          fetch("https://face-recognition-api-cobimr.herokuapp.com/image-entrie", {
             method: "put",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

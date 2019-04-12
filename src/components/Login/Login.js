@@ -18,7 +18,7 @@ class Login extends React.Component {
   };
 
   onSubmitLogin = () => {
-    fetch("https://dry-lowlands-90592.herokuapp.com/login", {
+    fetch("https://face-recognition-api-cobimr.herokuapp.com/login", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
