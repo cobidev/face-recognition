@@ -13,12 +13,6 @@ import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import "tachyons";
 import "./App.css";
 
-// Clarifai config
-const Clarifai = require("clarifai");
-const app = new Clarifai.App({
-  apiKey: "f51b1b849d1041cc8dd2fd2cb149e3de"
-});
-
 // Particles config
 const PARTICLE_OPTIONS = {
   particles: {
@@ -106,7 +100,7 @@ class App extends Component {
       .then(response => {
         // Increase entries for the current user
         if (response) {
-          fetch("https://dry-lowlands-90592.herokuapp.com/image", {
+          fetch("https://dry-lowlands-90592.herokuapp.com/image-entrie", {
             method: "put",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
