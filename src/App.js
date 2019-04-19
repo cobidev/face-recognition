@@ -61,7 +61,7 @@ class App extends Component {
     this.setState({
       input: '',
       imageUrl: '',
-      box: {},
+      box: [],
       route: 'login',
       isLoggedIn: false,
       user: {
@@ -137,17 +137,22 @@ class App extends Component {
 
   // Function: that return an Object with the converted Face Measurements for the HTML/CSS use (in percentajes)
   calculateFaceDetection = data => {
-    const faceRegions = data.outputs[0].data.regions[0].region_info.bounding_box;
+    let arrOfRegions = [];
+    
     const image = document.getElementById('inputImage');
     const width = Number(image.width);
     const height = Number(image.height);
 
-    return {
-      leftCol: faceRegions.left_col * width,
-      topRow: faceRegions.top_row * height,
-      rightCol: width - faceRegions.right_col * width,
-      bottomRow: height - faceRegions.bottom_row * height,
-    };
+    for (let faceRegion of data.outputs[0].data.regions) {
+      arrOfRegions.push({
+        leftCol: faceRegion.region_info.bounding_box.left_col * width,
+        topRow: faceRegion.region_info.bounding_box.top_row * height,
+        rightCol: width - faceRegion.region_info.bounding_box.right_col * width,
+        bottomRow: height - faceRegion.region_info.bounding_box.bottom_row * height,
+      })
+    }
+
+    return arrOfRegions;
   };
 
   // Final Rendering
